@@ -147,24 +147,23 @@ enyo.kind({
 	      style: "background-color: white; padding:0px 16px 0px 16px; white-space: pre-wrap;"
 	  } : // OR
 	  // REAL webview
-	  {name: "body", kind: "WebView", flex: 1, style: "width: 100%; height: 100%; background-color: white; position: relative; border: 1px solid red;", onScrolledTo: "bodyScrolled",
+	  {name: "body", kind: "WebView", flex: 1, style: "width: 100%; height: 100%; background-color: white; position: relative; border: 1px solid red;",
 	      onUrlRedirected: "openLink", onMousehold: "webviewMousehold", className: "mail-body", enableJavascript: false, ignoreMetaTags: true,
 	      blockPopups: true, acceptCookies: false, autoFit: false, fitRender: true, onError: "webviewError", onDisconnected: "webviewDisconnected",
 	      onAlertDialog: "alertDialogHandler", onConfirmDialog: "confirmDialogHandler", onPromptDialog: "promptDialogHandler",
 	      onSSLConfirmDialog: "SSLConfirmDialogHandler"
 	  }
 	      ),
-	]},
-	//Quick Reply bar
-	{className: "dotted-bottom"},
-	{name: "quickreply", kind: "Input", hint: "Quick reply...", style: "background-color: white; height: 48px;", onchange: "inputChange", components: [
-	  {kind: "HFlexBox", components: [
-	  	{kind: "Button", name: "sendButton", style: "position: relative; top: -8px; background-color: white; border: 0;", components: [
-	      {className: "header-send-icon", onclick: "sendClick"}
-	  	]}
-	  ]}
-	]},
-	
+	  
+	  //Quick Reply bar
+	  {className: "dotted-bottom", style: "height: 1px;"},
+	  {name: "quickreply", kind: "Input", hint: "Quick reply...", style: "background-color: white; height: 48px;", onchange: "inputChange", components: [
+	      {kind: "HFlexBox", components: [
+		  {kind: "Button", name: "sendButton", style: "position: relative; top: -8px; background-color: white; border: 0;", components: [
+		      {className: "header-send-icon", onclick: "sendClick"}
+		  ]}
+	      ]}
+	  ]},
 	// end mail header unit
         {name: "appMgrOpen", method: "open", kind: "enyo.PalmService", service: enyo.palmServices.application},
         {name: "pseudoDetails", kind: "com.palm.library.contactsui.detailsDialog", onCancelClicked: "closePseudoDetails"},
@@ -221,14 +220,6 @@ enyo.kind({
             } else {
                 v.callBrowserAdapter(inMethod, inArgs);
             }
-        }
-    },
-
-    bodyScrolled: function (sender, x, y) {
-        var header = this.$.mailHeaderUnit;
-        if (header.hasNode()) {
-            header.domStyles.webkitTransform = "translateY(" + y + "px)";
-            header.node.style.webkitTransform = "translateY(" + y + "px)";
         }
     },
     openLink: function (inSender, url) {
@@ -876,28 +867,29 @@ enyo.kind({
         return this.$.body.$.view.flickHandler(sender, event);
     },
 
-    headerResized: function (sender, event) {
-        var view = this.$.body,
-            header = this.$.mailHeaderUnit;
-        var hb = header.getBounds(),
-            vb = view.getBounds();
-        view.applyStyle("width", vb.width + "px");
-        view.applyStyle("top", vb.top + "px");
-        // setHeaderHeight doesn't exist in browser
-        if (hb.height && view.setHeaderHeight) { // sometimes height is missing for some reason
-            view.setHeaderHeight(hb.height);
+//    headerResized: function (sender, event) {
+//        var view = this.$.body,
+//            header = this.$.mailHeaderUnit;
+//        var hb = header.getBounds(),
+//            vb = view.getBounds();
+//        view.applyStyle("width", vb.width + "px");
+//        view.applyStyle("top", vb.top + "px");
+//        // setHeaderHeight doesn't exist in browser
+
+//        if (hb.height && view.setHeaderHeight) { // sometimes height is missing for some reason
+//            view.setHeaderHeight(hb.height);
 
             // 300 is from the max height of the recipients list.
             // somehow that isn't accounted for, and this makes it all happy
-            var minHeight = hb.height + 300;
-            view.$.view.applyStyle("min-height", minHeight + "px");
-        }
-    },
+//            var minHeight = hb.height + 300;
+//            view.$.view.applyStyle("min-height", minHeight + "px");
+//        }
+//    },
     resize: function () {
-        this.headerResized();
-        if (this.$.body.resize) {
-            this.$.body.resize();
-        }
+        //this.headerResized();
+        //if (this.$.body.resize) {
+            //this.$.body.resize();
+        //}
         this.resized(); // provided by enyo. needed for vertical reflow
         this._doingNestedScroll = undefined;
     },
